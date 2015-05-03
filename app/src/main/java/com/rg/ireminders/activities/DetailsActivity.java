@@ -59,7 +59,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new TaskListAdapter(this, R.layout.details_item, null, 0);
+    mAdapter = new TaskListAdapter(this, R.layout.details_item, null, 0, color);
     ListView mListView = (ListView) findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getSupportLoaderManager().initLoader(URL_LOADER, getIntent().getExtras(), this);

@@ -1,7 +1,10 @@
 package com.rg.ireminders.adapters;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.os.Build;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -17,6 +20,7 @@ import org.dmfs.provider.tasks.TaskContract;
 
 public class TaskListAdapter extends ResourceCursorAdapter {
   private Context mContext;
+  private int mColor;
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -44,9 +48,10 @@ public class TaskListAdapter extends ResourceCursorAdapter {
         }
       };
 
-  public TaskListAdapter(Context context, int layout, Cursor c, int flags) {
+  public TaskListAdapter(Context context, int layout, Cursor c, int flags, int color) {
     super(context, layout, c, flags);
     mContext = context;
+    mColor = color;
   }
 
   @Override
@@ -63,6 +68,7 @@ public class TaskListAdapter extends ResourceCursorAdapter {
     statusRadioButton.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
     statusRadioButton.setTag(id);
     statusRadioButton.setOnCheckedChangeListener(mOnCheckedChangedListener);
+    setRadioButtonColor(statusRadioButton);
 
     titleEditText.setText(title);
     titleEditText.setTag(id);
@@ -75,6 +81,13 @@ public class TaskListAdapter extends ResourceCursorAdapter {
       String date = DateUtils.getDueDate(due);
       dueText.setVisibility(View.VISIBLE);
       dueText.setText(date);
+    }
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private void setRadioButtonColor(RadioButton statusRadioButton) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusRadioButton.setButtonTintList(ColorStateList.valueOf(mColor));
     }
   }
 }
