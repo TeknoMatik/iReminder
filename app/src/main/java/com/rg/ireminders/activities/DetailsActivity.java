@@ -18,7 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
 import com.rg.ireminders.adapters.TaskListAdapter;
+import com.rg.ireminders.db.entities.Task;
 import com.rg.ireminders.db.utils.TaskUtils;
+import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
 
 public class DetailsActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -32,6 +34,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   private Boolean mShowHidden = false;
   private EditText mAddEditText;
   private Long mListId;
+  private Long mShowTime;
 
   private View.OnKeyListener mAddEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -46,7 +49,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    mShowTime = new Date().getTime();
     onCreateLolipop();
 
     int color = getIntent().getIntExtra(TASK_LIST_COLOR_ARG, 0);
@@ -129,8 +132,11 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
       if (mShowHidden) {
         selection = String.format("%s = %d", TaskContract.TaskColumns.LIST_ID, taskListId);
       } else {
-        selection = String.format("%s = %d AND %s = %d", TaskContract.TaskColumns.LIST_ID, taskListId,
-            TaskContract.TaskColumns.STATUS, TaskContract.TaskColumns.STATUS_DEFAULT);
+        selection = String.format("%s = %d AND %s = %d OR (%s == %d AND %s > %d)",
+            TaskContract.TaskColumns.LIST_ID, taskListId,
+            TaskContract.TaskColumns.STATUS, TaskContract.TaskColumns.STATUS_DEFAULT,
+            TaskContract.TaskColumns.STATUS, TaskContract.TaskColumns.STATUS_COMPLETED,
+            TaskContract.TaskColumns.COMPLETED, mShowTime);
       }
 
       return new CursorLoader(this, TaskContract.Tasks.CONTENT_URI, null, selection, null,
@@ -163,7 +169,6 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     String title = mAddEditText.getText().toString();
     Boolean isInserted = TaskUtils.Factory.get(this).insertTask(title, mListId);
     if (isInserted) {
-      refreshList();
       mAddEditText.setText("");
       mAddEditText.setFocusable(true);
     }

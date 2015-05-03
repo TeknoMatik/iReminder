@@ -10,13 +10,15 @@ import java.util.List;
  * Created by rustamgaifullin on 2/7/15.
  */
 public interface TaskUtils {
-  public List<TaskList> getTaskList();
+  List<TaskList> getTaskList();
 
-  public List<Task> getTaskByTaskListId(Long taskListId);
+  List<Task> getTaskByTaskListId(Long taskListId);
 
-  public boolean insertTask(String taskName, Long taskListId);
+  boolean insertTask(String taskName, Long taskListId);
 
-  public void updateTask(Long id, String taskName);
+  void updateTask(Long id, String taskName);
+
+  void changeTaskStatus(Long id, boolean completed);
 
   public static class Factory {
     private static Factory instance = new Factory();

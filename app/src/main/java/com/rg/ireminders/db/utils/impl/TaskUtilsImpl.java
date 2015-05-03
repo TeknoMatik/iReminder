@@ -78,10 +78,24 @@ public class TaskUtilsImpl implements TaskUtils {
   }
 
   @Override public void updateTask(Long id, String taskName) {
-    ContentValues contentValues = new ContentValues();
-    contentValues.put(TaskContract.TaskColumns.TITLE, taskName);
-    String where = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
+    updateTask(id, taskName, null);
+  }
 
+  @Override public void changeTaskStatus(Long id, boolean completed) {
+    updateTask(id, null, completed);
+  }
+
+  private void updateTask(Long id, String taskName, Boolean isCompleted) {
+    ContentValues contentValues = new ContentValues();
+    if (taskName != null) {
+      contentValues.put(TaskContract.TaskColumns.TITLE, taskName);
+    }
+    if (isCompleted != null) {
+      int status = isCompleted ? TaskContract.TaskColumns.STATUS_COMPLETED : TaskContract.TaskColumns.STATUS_DEFAULT;
+      contentValues.put(TaskContract.TaskColumns.STATUS, status);
+    }
+
+    String where = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
     mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues, where, null);
   }
 }
