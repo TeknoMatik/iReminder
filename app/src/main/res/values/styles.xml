@@ -1,0 +1,13 @@
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <!-- Base application theme. -->
+  <style name="AppTheme"
+      parent="Theme.AppCompat.Light">
+    <item name="android:windowBackground">@color/windowBackground</item>
+    <item name="android:textColorPrimary">@android:color/white</item>
+    <item name="windowActionBar">false</item>
+    <!--<item name="android:actionBarStyle"   tools:ignore="NewApi">@style/MainActionBar</item>-->
+    <!--<item name="actionBarStyle">@style/MainActionBar</item>-->
+  </style>
+</resources>

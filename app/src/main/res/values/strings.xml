@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">iReminders</string>
+  <string name="hello_world">Hello world!</string>
+  <string name="action_settings">Settings</string>
+  <string name="title_activity_details">DetailsActivity</string>
+  <string name="permission_description_read_tasks">permission_description_read_tasks</string>
+  <string name="permission_read_tasks">permission_read_tasks</string>
+  <string name="permission_description_write_tasks">permission_description_write_tasks</string>
+  <string name="permission_write_tasks">permission_write_tasks</string>
+  <string name="provider_label">iReminder</string>
+  <string name="org_dmfs_tasks_authority">org.dmfs.tasks</string>
+  <string name="show_hidden">Show hidden</string>
+</resources>
