@@ -16,6 +16,8 @@ public interface TaskUtils {
 
   public boolean insertTask(String taskName, Long taskListId);
 
+  public void updateTask(Long id, String taskName);
+
   public static class Factory {
     private static Factory instance = new Factory();
 

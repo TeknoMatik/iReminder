@@ -76,4 +76,12 @@ public class TaskUtilsImpl implements TaskUtils {
     Uri uri = mContentResolver.insert(TaskContract.Tasks.CONTENT_URI, contentValues);
     return uri != null;
   }
+
+  @Override public void updateTask(Long id, String taskName) {
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(TaskContract.TaskColumns.TITLE, taskName);
+    String where = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
+
+    mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues, where, null);
+  }
 }
