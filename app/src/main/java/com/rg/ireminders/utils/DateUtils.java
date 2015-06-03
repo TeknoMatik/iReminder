@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by rustamgaifullin on 4/13/15.
  */
-public class DateUtils {
+public final class DateUtils {
   public static String getDueDate(Long milliseconds) {
     Date date = new Date(milliseconds);
     DateFormat dateFormat = DateFormat.getInstance();
