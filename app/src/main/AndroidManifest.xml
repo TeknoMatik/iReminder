@@ -51,6 +51,7 @@
     <activity
         android:name=".activities.DetailsActivity"
         android:parentActivityName=".activities.MainActivity"
+        android:windowSoftInputMode="stateUnchanged|adjustResize"
         >
 
       <meta-data

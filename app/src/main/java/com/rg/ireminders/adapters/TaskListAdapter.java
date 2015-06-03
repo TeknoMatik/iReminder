@@ -1,93 +1,72 @@
 package com.rg.ireminders.adapters;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
-import android.os.Build;
-import android.view.KeyEvent;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.ResourceCursorAdapter;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.db.utils.TaskUtils;
-import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
-import com.rg.ireminders.utils.DateUtils;
-import org.dmfs.provider.tasks.TaskContract;
+import com.rg.ireminders.db.entities.TaskList;
+import java.util.List;
 
-public class TaskListAdapter extends ResourceCursorAdapter {
-  private Context mContext;
-  private int mColor;
+public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
+  private List<TaskList> mDataSet;
+  private IReminderClickListener listener;
 
-  private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
-    @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
-      if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-        String title = ((EditText) v).getText().toString();
-        Long id = (Long) v.getTag();
-        TaskUtils.Factory.get(mContext).updateTask(id, title);
-        return true;
-      }
-      return false;
-    }
-  };
-
-  private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-    @Override public void onClick(View v) {
-      v.setFocusable(true);
-    }
-  };
-
-  private CompoundButton.OnCheckedChangeListener mOnCheckedChangedListener =
-      new CompoundButton.OnCheckedChangeListener() {
-        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-          Long id = (Long) buttonView.getTag();
-          TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(id, isChecked);
-        }
-      };
-
-  public TaskListAdapter(Context context, int layout, Cursor c, int flags, int color) {
-    super(context, layout, c, flags);
-    mContext = context;
-    mColor = color;
+  public TaskListAdapter(List<TaskList> mDataSet, IReminderClickListener listener) {
+    this.mDataSet = mDataSet;
+    this.listener = listener;
   }
 
   @Override
-  public void bindView(View view, Context context, Cursor cursor) {
-    RadioButton statusRadioButton = (RadioButton) view.findViewById(R.id.radioButton);
-    EditText titleEditText = (EditText) view.findViewById(R.id.radioButtonText);
-    TextView dueText = (TextView) view.findViewById(R.id.dueTextView);
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.reminder_item, parent, false);
 
-    String title = cursor.getString(cursor.getColumnIndex(TaskContract.TaskColumns.TITLE));
-    Integer status = cursor.getInt(cursor.getColumnIndex(TaskContract.TaskColumns.STATUS));
-    Long due = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE));
-    Long id = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID));
+    return new ViewHolder(v, listener);
+  }
 
-    statusRadioButton.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
-    statusRadioButton.setTag(id);
-    statusRadioButton.setOnCheckedChangeListener(mOnCheckedChangedListener);
-    setRadioButtonColor(statusRadioButton);
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
+    TaskList taskList = mDataSet.get(position);
 
-    titleEditText.setText(title);
-    titleEditText.setTag(id);
-    titleEditText.setOnKeyListener(mEditTextKeyListener);
-    titleEditText.setOnClickListener(mOnClickListener);
+    holder.mTextView.setText(taskList.getName());
+    holder.mTextView.setTag(taskList.getId());
+    holder.setColor(taskList.getColor());
+  }
 
-    if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
-      dueText.setVisibility(View.GONE);
-    } else {
-      String date = DateUtils.getDueDate(due);
-      dueText.setVisibility(View.VISIBLE);
-      dueText.setText(date);
+  @Override
+  public int getItemCount() {
+    return mDataSet.size();
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public TextView mTextView;
+    public CardView mCardView;
+    public int mColor;
+    private IReminderClickListener listener;
+
+    public ViewHolder(View v, IReminderClickListener listener) {
+      super(v);
+      this.listener = listener;
+
+      mCardView = (CardView) v.findViewById(R.id.card_view);
+      mTextView = (TextView) mCardView.findViewById(R.id.info_text);
+      mCardView.setOnClickListener(this);
+    }
+
+    public void setColor(int color) {
+      mTextView.setTextColor(color);
+      this.mColor = color;
+    }
+
+    @Override
+    public void onClick(final View view) {
+      listener.onClick(view, mTextView.getText().toString(), (Long) mTextView.getTag(), mColor);
     }
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  private void setRadioButtonColor(RadioButton statusRadioButton) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      statusRadioButton.setButtonTintList(ColorStateList.valueOf(mColor));
-    }
+  public static interface IReminderClickListener {
+    public void onClick(View v, String item, Long taskId, int color);
   }
 }

@@ -1,8 +1,6 @@
 package com.rg.ireminders.activities;
 
-import android.annotation.TargetApi;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -11,14 +9,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.adapters.TaskListAdapter;
-import com.rg.ireminders.db.entities.Task;
+import com.rg.ireminders.adapters.DetailsAdapter;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
@@ -30,7 +26,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   public static final String TASK_LIST_COLOR_ARG = "taskListColor";
 
   private static final int URL_LOADER = 0;
-  private TaskListAdapter mAdapter;
+  private DetailsAdapter mAdapter;
   private Boolean mShowHidden = false;
   private EditText mAddEditText;
   private Long mListId;
@@ -50,7 +46,6 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mShowTime = new Date().getTime();
-    onCreateLolipop();
 
     int color = getIntent().getIntExtra(TASK_LIST_COLOR_ARG, 0);
     String detailString = getIntent().getStringExtra(TASK_LIST_DETAILS_ARG);
@@ -59,7 +54,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new TaskListAdapter(this, R.layout.details_item, null, 0, color);
+    mAdapter = new DetailsAdapter(this, R.layout.details_item, null, 0, color);
     ListView mListView = (ListView) findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getSupportLoaderManager().initLoader(URL_LOADER, getIntent().getExtras(), this);
@@ -68,24 +63,6 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mAddEditText = (EditText) footerLayout.findViewById(R.id.addTaskEditText);
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  private void onCreateLolipop() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      postponeEnterTransition();
-      final ViewTreeObserver observer = getWindow().getDecorView().getViewTreeObserver();
-      observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-        @Override
-        public boolean onPreDraw() {
-          if (observer.isAlive()) {
-            observer.removeOnPreDrawListener(this);
-          }
-          startPostponedEnterTransition();
-          return true;
-        }
-      });
-    }
   }
 
   @Override protected void onResume() {

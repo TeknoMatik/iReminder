@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import com.rg.ireminders.R;
-import com.rg.ireminders.adapters.ReminderAdapter;
+import com.rg.ireminders.adapters.TaskListAdapter;
 import com.rg.ireminders.db.entities.TaskList;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-  ReminderAdapter.IReminderClickListener listener = new ReminderAdapter.IReminderClickListener() {
+  TaskListAdapter.IReminderClickListener listener = new TaskListAdapter.IReminderClickListener() {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP) @Override
     public void onClick(View v, String item, Long taskId, int color) {
       Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
     mRecyclerView.setLayoutManager(mLayoutManager);
 
-    RecyclerView.Adapter mAdapter = new ReminderAdapter(taskList, listener);
+    RecyclerView.Adapter mAdapter = new TaskListAdapter(taskList, listener);
     mRecyclerView.setAdapter(mAdapter);
   }
 
