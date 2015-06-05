@@ -1,5 +1,8 @@
 package com.rg.ireminders.db.entities;
 
+import android.database.Cursor;
+import org.dmfs.provider.tasks.TaskContract;
+
 public class TaskList {
   private Long id;
   private String name;
@@ -7,6 +10,15 @@ public class TaskList {
   private Integer visible;
   private Integer syncEnabled;
   private String owner;
+
+  public void fromCursor(Cursor cursor) {
+    setId(cursor.getLong(cursor.getColumnIndex(TaskContract.TaskListColumns._ID)));
+    setName(cursor.getString(cursor.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME)));
+    setColor(cursor.getInt(cursor.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR)));
+    setOwner(cursor.getString(cursor.getColumnIndex(TaskContract.TaskListColumns.OWNER)));
+    setSyncEnabled(cursor.getInt(cursor.getColumnIndex(TaskContract.TaskListColumns.SYNC_ENABLED)));
+    setVisible(cursor.getInt(cursor.getColumnIndex(TaskContract.TaskListColumns.VISIBLE)));
+  }
 
   public Long getId() {
     return id;

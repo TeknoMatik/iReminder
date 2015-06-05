@@ -21,11 +21,10 @@ import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
 import com.rg.ireminders.utils.DateUtils;
 import org.dmfs.provider.tasks.TaskContract;
 
-public class DetailsAdapter extends ResourceCursorAdapter {
+public class DetailsCursorAdapter extends ResourceCursorAdapter {
   private static final String TAG = "DetailsAdapter";
   private Context mContext;
   private int mColor;
-  private EditText mFocusableEditText;
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -54,7 +53,7 @@ public class DetailsAdapter extends ResourceCursorAdapter {
         }
       };
 
-  public DetailsAdapter(Context context, int layout, Cursor c, int flags, int color) {
+  public DetailsCursorAdapter(Context context, int layout, Cursor c, int flags, int color) {
     super(context, layout, c, flags);
     mContext = context;
     mColor = color;
@@ -82,14 +81,6 @@ public class DetailsAdapter extends ResourceCursorAdapter {
     titleEditText.setTag(id);
     titleEditText.setOnKeyListener(mEditTextKeyListener);
     titleEditText.setOnClickListener(mOnClickListener);
-    titleEditText.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-          mFocusableEditText = (EditText) v;
-        }
-        return false;
-      }
-    });
 
     if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
       dueText.setVisibility(View.GONE);

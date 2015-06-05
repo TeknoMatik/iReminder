@@ -7,19 +7,17 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.adapters.DetailsAdapter;
+import com.rg.ireminders.adapters.DetailsCursorAdapter;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
@@ -31,7 +29,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   public static final String TASK_LIST_COLOR_ARG = "taskListColor";
 
   private static final int URL_LOADER = 0;
-  private DetailsAdapter mAdapter;
+  private DetailsCursorAdapter mAdapter;
   private Boolean mShowHidden = false;
   private EditText mAddEditText;
   private Long mListId;
@@ -60,7 +58,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new DetailsAdapter(this, R.layout.details_item, null, 0, color);
+    mAdapter = new DetailsCursorAdapter(this, R.layout.details_item, null, 0, color);
     ListView mListView = (ListView) findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getSupportLoaderManager().initLoader(URL_LOADER, getIntent().getExtras(), this);
@@ -69,6 +67,9 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mAddEditText = (EditText) footerLayout.findViewById(R.id.addTaskEditText);
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
+
+    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+    mListView.setStackFromBottom(true);
   }
 
   /**

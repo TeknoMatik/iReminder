@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rg.ireminders"
     xmlns:tools="http://schemas.android.com/tools"
+    package="com.rg.ireminders"
     >
 
   <permission
@@ -39,7 +39,7 @@
       android:theme="@style/AppTheme"
       >
     <activity
-        android:name=".activities.MainActivity"
+        android:name=".activities.TaskListActivity"
         android:label="@string/app_name"
         >
       <intent-filter>
@@ -50,19 +50,18 @@
     </activity>
     <activity
         android:name=".activities.DetailsActivity"
-        android:parentActivityName=".activities.MainActivity"
-        android:windowSoftInputMode="adjustPan"
+        android:parentActivityName=".activities.TaskListActivity"
         >
 
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.rg.ireminders.activities.MainActivity"
+          android:value=".activities.TaskListActivity"
           />
     </activity>
 
     <receiver android:name="org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler">
       <intent-filter>
-        <action android:name="org.dmfs.android.tasks.TASK_DUE" />
+        <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -73,14 +72,15 @@
     </receiver>
     <receiver
         android:name="org.dmfs.provider.tasks.broadcast.TimeChangeBroadcastReceiver"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        >
       <intent-filter>
-        <action android:name="android.intent.action.TIME_SET" />
+        <action android:name="android.intent.action.TIME_SET"/>
       </intent-filter>
     </receiver>
-    <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
+    <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver">
       <intent-filter>
-        <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+        <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"/>
       </intent-filter>
     </receiver>
 
@@ -89,7 +89,8 @@
         <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
         <data
             android:host="@string/org_dmfs_tasks_authority"
-            android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
+            />
       </intent-filter>
     </receiver>
 
