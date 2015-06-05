@@ -6,7 +6,9 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -20,10 +22,10 @@ import com.rg.ireminders.utils.DateUtils;
 import org.dmfs.provider.tasks.TaskContract;
 
 public class DetailsAdapter extends ResourceCursorAdapter {
+  private static final String TAG = "DetailsAdapter";
   private Context mContext;
   private int mColor;
-  private Handler mHandler = new Handler();
-  private Long mLastFocussedPosition = -1L;
+  private EditText mFocusableEditText;
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -34,6 +36,13 @@ public class DetailsAdapter extends ResourceCursorAdapter {
         return true;
       }
       return false;
+    }
+  };
+
+  private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    @Override public void onClick(View v) {
+      v.setFocusable(true);
+      v.setFocusableInTouchMode(true);
     }
   };
 
@@ -62,6 +71,8 @@ public class DetailsAdapter extends ResourceCursorAdapter {
     Long due = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE));
     final Long id = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID));
 
+    Log.d(TAG, "bindView - " + title);
+
     statusRadioButton.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
     statusRadioButton.setTag(id);
     statusRadioButton.setOnCheckedChangeListener(mOnCheckedChangedListener);
@@ -70,24 +81,13 @@ public class DetailsAdapter extends ResourceCursorAdapter {
     titleEditText.setText(title);
     titleEditText.setTag(id);
     titleEditText.setOnKeyListener(mEditTextKeyListener);
-    //TODO: This is very dirty workaround for not losing a focus. Tomorrow you must remove it and make something better.
-    titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-      @Override public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-          mHandler.postDelayed(new Runnable() {
-
-            @Override public void run() {
-              if (mLastFocussedPosition == -1L || mLastFocussedPosition.equals(id)) {
-                mLastFocussedPosition = id;
-                titleEditText.setSelection(titleEditText.getText().length());
-                titleEditText.requestFocus();
-              }
-            }
-          }, 200);
-
-        } else {
-          mLastFocussedPosition = -1L;
+    titleEditText.setOnClickListener(mOnClickListener);
+    titleEditText.setOnTouchListener(new View.OnTouchListener() {
+      @Override public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+          mFocusableEditText = (EditText) v;
         }
+        return false;
       }
     });
 

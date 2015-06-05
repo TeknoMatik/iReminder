@@ -51,7 +51,7 @@
     <activity
         android:name=".activities.DetailsActivity"
         android:parentActivityName=".activities.MainActivity"
-        android:windowSoftInputMode="stateUnchanged|adjustResize"
+        android:windowSoftInputMode="adjustPan"
         >
 
       <meta-data
