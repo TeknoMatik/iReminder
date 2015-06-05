@@ -1,14 +1,19 @@
 package com.rg.ireminders.activities;
 
+import android.annotation.TargetApi;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -46,6 +51,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mShowTime = new Date().getTime();
+    onCreateLolipop();
 
     int color = getIntent().getIntExtra(TASK_LIST_COLOR_ARG, 0);
     String detailString = getIntent().getStringExtra(TASK_LIST_DETAILS_ARG);
@@ -63,6 +69,27 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mAddEditText = (EditText) footerLayout.findViewById(R.id.addTaskEditText);
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
+  }
+
+  /**
+   * This method prevent status bar from blinking
+   */
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private void onCreateLolipop() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      postponeEnterTransition();
+      final ViewTreeObserver observer = getWindow().getDecorView().getViewTreeObserver();
+      observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        @Override
+        public boolean onPreDraw() {
+          if (observer.isAlive()) {
+            observer.removeOnPreDrawListener(this);
+          }
+          startPostponedEnterTransition();
+          return true;
+        }
+      });
+    }
   }
 
   @Override protected void onResume() {
