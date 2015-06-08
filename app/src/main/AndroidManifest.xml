@@ -39,7 +39,7 @@
       android:theme="@style/AppTheme"
       >
     <activity
-        android:name=".activities.TaskListActivity"
+        android:name=".ui.activities.TaskListActivity"
         android:label="@string/app_name"
         >
       <intent-filter>
@@ -49,13 +49,15 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".activities.DetailsActivity"
-        android:parentActivityName=".activities.TaskListActivity"
+        android:name=".ui.activities.DetailsActivity"
+        android:parentActivityName=".ui.activities.TaskListActivity"
+        android:windowSoftInputMode="adjustResize"
+        tools:ignore="UnusedAttribute"
         >
 
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value=".activities.TaskListActivity"
+          android:value=".ui.activities.TaskListActivity"
           />
     </activity>
 

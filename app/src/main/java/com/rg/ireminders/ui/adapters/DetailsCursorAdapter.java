@@ -1,14 +1,12 @@
-package com.rg.ireminders.adapters;
+package com.rg.ireminders.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -40,8 +38,8 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
 
   private View.OnClickListener mOnClickListener = new View.OnClickListener() {
     @Override public void onClick(View v) {
-      v.setFocusable(true);
-      v.setFocusableInTouchMode(true);
+      //v.setFocusable(true);
+      //v.setFocusableInTouchMode(true);
     }
   };
 

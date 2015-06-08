@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.rg.ireminders.activities.TaskListActivity"
+    tools:context="com.rg.ireminders.ui.activities.TaskListActivity"
     >
 
   <include
       android:id="@+id/toolbar"
       layout="@layout/toolbar"
       />
-
   <ListView
       android:layout_width="match_parent"
       android:layout_height="match_parent"

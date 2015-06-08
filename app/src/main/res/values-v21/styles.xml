@@ -3,19 +3,23 @@
 
   <!-- Base application theme. -->
   <style name="AppTheme"
-      parent="Theme.AppCompat.Light">
+      parent="Theme.AppCompat.Light.NoActionBar">
     <item name="android:colorPrimary">@color/primary</item>
     <item name="android:colorPrimaryDark">@color/primary_dark</item>
     <item name="android:colorAccent">@color/accent</item>
     <item name="android:windowBackground">@color/windowBackground</item>
-    <!--<item name="android:textColorPrimary">@android:color/white</item>-->
     <item name="android:windowAllowEnterTransitionOverlap">true</item>
     <item name="android:windowAllowReturnTransitionOverlap">true</item>
     <item name="android:windowContentTransitions">true</item>
+    <item name="windowActionModeOverlay">true</item>
     <item name="android:navigationBarColor">@color/primary_dark</item>
     <item name="windowActionBar">false</item>
-    <!--<item name="android:actionBarStyle"   tools:ignore="NewApi">@style/MainActionBar</item>-->
-    <!--<item name="actionBarStyle">@style/MainActionBar</item>-->
+    <item name="actionModeStyle">@style/LStyled.ActionMode</item>
+
+  </style>
+
+  <style name="LStyled.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+    <item name="background">@color/primary</item>
   </style>
 
   <style name="MainActionBar"

@@ -1,4 +1,4 @@
-package com.rg.ireminders.adapters;
+package com.rg.ireminders.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;

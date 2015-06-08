@@ -1,4 +1,4 @@
-package com.rg.ireminders.activities;
+package com.rg.ireminders.ui.activities;
 
 import android.annotation.TargetApi;
 import android.database.Cursor;
@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.adapters.DetailsCursorAdapter;
+import com.rg.ireminders.ui.adapters.DetailsCursorAdapter;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
@@ -68,8 +68,8 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
 
-    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-    mListView.setStackFromBottom(true);
+    //mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+    //mListView.setStackFromBottom(true);
   }
 
   /**

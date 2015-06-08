@@ -1,4 +1,4 @@
-package com.rg.ireminders.activities;
+package com.rg.ireminders.ui.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.adapters.TaskListCursorAdapter;
+import com.rg.ireminders.ui.adapters.TaskListCursorAdapter;
 import com.rg.ireminders.db.entities.TaskList;
 import java.util.ArrayList;
 import java.util.List;
