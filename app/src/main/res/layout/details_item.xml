@@ -13,7 +13,7 @@
       android:columnCount="2"
       android:rowCount="2"
       >
-    <RadioButton
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/radioButton"
