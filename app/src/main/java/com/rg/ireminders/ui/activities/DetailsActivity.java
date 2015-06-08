@@ -68,8 +68,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
 
-    //mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-    //mListView.setStackFromBottom(true);
+    mListView.setClickable(false);
   }
 
   /**

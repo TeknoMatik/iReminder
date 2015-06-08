@@ -8,9 +8,9 @@ import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import com.rg.ireminders.R;
@@ -38,8 +38,7 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
 
   private View.OnClickListener mOnClickListener = new View.OnClickListener() {
     @Override public void onClick(View v) {
-      //v.setFocusable(true);
-      //v.setFocusableInTouchMode(true);
+      //v.requestFocus();
     }
   };
 
@@ -59,7 +58,7 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
 
   @Override
   public void bindView(View view, Context context, Cursor cursor) {
-    RadioButton statusRadioButton = (RadioButton) view.findViewById(R.id.radioButton);
+    CheckBox statusCheckBox = (CheckBox) view.findViewById(R.id.radioButton);
     final EditText titleEditText = (EditText) view.findViewById(R.id.radioButtonText);
     TextView dueText = (TextView) view.findViewById(R.id.dueTextView);
 
@@ -70,10 +69,10 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
 
     Log.d(TAG, "bindView - " + title);
 
-    statusRadioButton.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
-    statusRadioButton.setTag(id);
-    statusRadioButton.setOnCheckedChangeListener(mOnCheckedChangedListener);
-    setRadioButtonColor(statusRadioButton);
+    statusCheckBox.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
+    statusCheckBox.setTag(id);
+    statusCheckBox.setOnCheckedChangeListener(mOnCheckedChangedListener);
+    setCheckBoxColor(statusCheckBox);
 
     titleEditText.setText(title);
     titleEditText.setTag(id);
@@ -89,10 +88,12 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
     }
   }
 
+
+
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  private void setRadioButtonColor(RadioButton statusRadioButton) {
+  private void setCheckBoxColor(CheckBox statusCheckBox) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      statusRadioButton.setButtonTintList(ColorStateList.valueOf(mColor));
+      statusCheckBox.setButtonTintList(ColorStateList.valueOf(mColor));
     }
   }
 }

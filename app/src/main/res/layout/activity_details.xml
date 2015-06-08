@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.rg.ireminders.ui.activities.DetailsActivity"
+    android:fitsSystemWindows="true"
     >
 
   <include
       android:id="@+id/toolbar"
       layout="@layout/toolbar"
       />
-
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -41,5 +41,6 @@
         android:id="@+id/task_list"
         />
   </LinearLayout>
+
 
 </RelativeLayout>

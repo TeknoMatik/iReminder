@@ -51,7 +51,6 @@
     <activity
         android:name=".ui.activities.DetailsActivity"
         android:parentActivityName=".ui.activities.TaskListActivity"
-        android:windowSoftInputMode="adjustResize"
         tools:ignore="UnusedAttribute"
         >
 
