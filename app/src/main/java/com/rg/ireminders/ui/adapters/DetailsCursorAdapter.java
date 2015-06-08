@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -23,6 +25,9 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
   private static final String TAG = "DetailsAdapter";
   private Context mContext;
   private int mColor;
+  private int mSelectionStart;
+  private int mSelectionEnd;
+  private EditText mLastTouched;
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -36,9 +41,29 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
     }
   };
 
-  private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-    @Override public void onClick(View v) {
-      //v.requestFocus();
+  /**
+   * Workaround for getting focus on edittext
+   * Setting selection positions to temporary variables
+   */
+  private final View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+    @Override public void onFocusChange(View v, boolean hasFocus) {
+      EditText editText = (EditText) v;
+      mSelectionStart = editText.getSelectionStart();
+      mSelectionEnd = editText.getSelectionEnd();
+    }
+  };
+
+  /**
+   * Workaround for getting focus on edittext
+   * Setting edittext in temporary variable
+   */
+  private final View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+    @Override public boolean onTouch(View v, MotionEvent event) {
+      if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        mLastTouched = (EditText) v;
+      }
+
+      return false;
     }
   };
 
@@ -77,7 +102,8 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
     titleEditText.setText(title);
     titleEditText.setTag(id);
     titleEditText.setOnKeyListener(mEditTextKeyListener);
-    titleEditText.setOnClickListener(mOnClickListener);
+    titleEditText.setOnFocusChangeListener(mOnFocusChangeListener);
+    titleEditText.setOnTouchListener(mOnTouchListener);
 
     if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
       dueText.setVisibility(View.GONE);
@@ -86,9 +112,13 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
       dueText.setVisibility(View.VISIBLE);
       dueText.setText(date);
     }
+
+    //Return focus and selection position
+    if (mLastTouched != null) {
+      mLastTouched.requestFocus();
+      mLastTouched.setSelection(mSelectionStart, mSelectionEnd);
+    }
   }
-
-
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private void setCheckBoxColor(CheckBox statusCheckBox) {
