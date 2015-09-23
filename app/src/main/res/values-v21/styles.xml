@@ -7,15 +7,18 @@
     <item name="android:colorPrimary">@color/primary</item>
     <item name="android:colorPrimaryDark">@color/primary_dark</item>
     <item name="android:colorAccent">@color/accent</item>
+    <item name="android:textColorPrimary">@android:color/black</item>
+    <item name="android:textColorPrimaryInverse">@android:color/white</item>
+    <item name="android:statusBarColor">@color/primary_dark</item>
     <item name="android:windowBackground">@color/windowBackground</item>
-    <item name="android:windowAllowEnterTransitionOverlap">true</item>
-    <item name="android:windowAllowReturnTransitionOverlap">true</item>
     <item name="android:windowContentTransitions">true</item>
-    <item name="windowActionModeOverlay">true</item>
-    <item name="android:navigationBarColor">@color/primary_dark</item>
-    <item name="windowActionBar">false</item>
+    <item name="android:titleTextAppearance">@style/Topeka.TextAppearance.Title</item>
     <item name="actionModeStyle">@style/LStyled.ActionMode</item>
 
+  </style>
+
+  <style name="Topeka.TextAppearance.Title" parent="android:TextAppearance.Material.Title">
+    <item name="android:textColor">@color/primary</item>
   </style>
 
   <style name="LStyled.ActionMode" parent="@style/Widget.AppCompat.ActionMode">

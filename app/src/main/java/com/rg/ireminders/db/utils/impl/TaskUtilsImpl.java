@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import com.rg.ireminders.db.entities.Task;
 import com.rg.ireminders.db.entities.TaskList;
 import com.rg.ireminders.db.utils.TaskUtils;
@@ -13,6 +14,7 @@ import java.util.List;
 import org.dmfs.provider.tasks.TaskContract;
 
 public class TaskUtilsImpl implements TaskUtils {
+  private static final String TAG = "TaskUtilsImpl";
   private ContentResolver mContentResolver;
 
   public TaskUtilsImpl(ContentResolver contentResolver) {
@@ -96,6 +98,7 @@ public class TaskUtilsImpl implements TaskUtils {
     }
 
     String where = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
-    mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues, where, null);
+    int rows = mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues, where, null);
+    Log.d(TAG, "Rows updated: " + rows);
   }
 }

@@ -70,6 +70,7 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
   private CompoundButton.OnCheckedChangeListener mOnCheckedChangedListener =
       new CompoundButton.OnCheckedChangeListener() {
         @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          Log.d(TAG, "On Checkec Change to: " + isChecked);
           Long id = (Long) buttonView.getTag();
           TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(id, isChecked);
         }
@@ -92,7 +93,7 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
     Long due = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE));
     final Long id = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID));
 
-    Log.d(TAG, "bindView - " + title);
+    Log.d(TAG, "bindView: " + title + " status: " + status);
 
     statusCheckBox.setChecked(status != TaskContract.TaskColumns.STATUS_NEEDS_ACTION);
     statusCheckBox.setTag(id);
@@ -113,7 +114,7 @@ public class DetailsCursorAdapter extends ResourceCursorAdapter {
       dueText.setText(date);
     }
 
-    //Return focus and selection position
+    //Return focus and selection
     if (mLastTouched != null) {
       mLastTouched.requestFocus();
       mLastTouched.setSelection(mSelectionStart, mSelectionEnd);
