@@ -71,8 +71,9 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     mAddEditText = (EditText) footerLayout.findViewById(R.id.addTaskEditText);
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
-
     mListView.setClickable(false);
+
+    setHasOptionsMenu(true);
 
     return view;
   }
