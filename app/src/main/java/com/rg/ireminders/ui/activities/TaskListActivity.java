@@ -42,10 +42,10 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.O
   }
 
   @Override public void onTaskListItemClick(View view, String taskName, Long taskId, Integer taskColor) {
-    Intent intent = new Intent(TaskListActivity.this, DetailsActivity.class);
-    intent.putExtra(DetailsActivity.TASK_LIST_DETAILS_ARG, taskName);
-    intent.putExtra(DetailsActivity.TASK_LIST_ID_ARG, taskId);
-    intent.putExtra(DetailsActivity.TASK_LIST_COLOR_ARG, taskColor);
+    Intent intent = new Intent(TaskListActivity.this, TaskItemsActivity.class);
+    intent.putExtra(TaskItemsActivity.TASK_LIST_DETAILS_ARG, taskName);
+    intent.putExtra(TaskItemsActivity.TASK_LIST_ID_ARG, taskId);
+    intent.putExtra(TaskItemsActivity.TASK_LIST_COLOR_ARG, taskColor);
     View transitionView = view.findViewById(R.id.transition_view);
     List<Pair<View, String>> pairs = createPairs(transitionView);
 

@@ -1,28 +1,13 @@
 package com.rg.ireminders.ui.activities;
 
 import android.annotation.TargetApi;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import com.rg.ireminders.R;
-import com.rg.ireminders.ui.adapters.DetailsCursorAdapter;
-import com.rg.ireminders.db.utils.TaskUtils;
-import java.util.Date;
-import org.dmfs.provider.tasks.TaskContract;
 
-public class DetailsActivity extends BaseActivity {
+public class TaskItemsActivity extends BaseActivity {
 
   public static final String TASK_LIST_ID_ARG = "taskListId";
   public static final String TASK_LIST_DETAILS_ARG = "taskListDetails";

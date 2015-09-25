@@ -1,7 +1,7 @@
 package com.rg.ireminders.db.utils;
 
 import android.content.Context;
-import com.rg.ireminders.db.entities.Task;
+import com.rg.ireminders.db.entities.TaskItem;
 import com.rg.ireminders.db.entities.TaskList;
 import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
 import java.util.List;
@@ -12,13 +12,13 @@ import java.util.List;
 public interface TaskUtils {
   List<TaskList> getTaskList();
 
-  List<Task> getTaskByTaskListId(Long taskListId);
+  List<TaskItem> getTaskByTaskListId(Long taskListId);
 
   boolean insertTask(String taskName, Long taskListId);
 
-  void updateTask(Long id, String taskName);
+  void updateTask(Long id, Long listId, String taskName);
 
-  void changeTaskStatus(Long id, boolean completed);
+  void changeTaskStatus(Long id, Long listId, boolean completed);
 
   public static class Factory {
     private static Factory instance = new Factory();

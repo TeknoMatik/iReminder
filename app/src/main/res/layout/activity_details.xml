@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.rg.ireminders.ui.activities.DetailsActivity"
+    tools:context="com.rg.ireminders.ui.activities.TaskItemsActivity"
     android:fitsSystemWindows="true"
     >
 
@@ -14,8 +14,8 @@
       />
   <fragment
       android:name="com.rg.ireminders.ui.fragments.TaskItemsFragment"
+      android:id="@+id/detailsFragment"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
-
-
+      android:layout_height="match_parent"
+      />
 </LinearLayout>

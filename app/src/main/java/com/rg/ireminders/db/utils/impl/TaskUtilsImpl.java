@@ -5,11 +5,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
-import com.rg.ireminders.db.entities.Task;
+import com.rg.ireminders.db.entities.TaskItem;
 import com.rg.ireminders.db.entities.TaskList;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.dmfs.provider.tasks.TaskContract;
 
@@ -50,15 +49,15 @@ public class TaskUtilsImpl implements TaskUtils {
   }
 
   @Override
-  public List<Task> getTaskByTaskListId(Long taskListId) {
-    List<Task> tasks = new ArrayList<>();
+  public List<TaskItem> getTaskByTaskListId(Long taskListId) {
+    List<TaskItem> tasks = new ArrayList<>();
     String selection = String.format("%s = %s", TaskContract.TaskColumns.LIST_ID, taskListId);
     Cursor cursor = mContentResolver.query(TaskContract.Tasks.CONTENT_URI, null, selection, null, null);
     cursor.moveToFirst();
     while (cursor.moveToNext()) {
-      Task task = new Task();
+      TaskItem task = new TaskItem();
 
-      task.setId(cursor.getInt(cursor.getColumnIndex(TaskContract.TaskColumns._ID)));
+      task.setId(cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID)));
       task.setTitle(cursor.getString(cursor.getColumnIndex(TaskContract.TaskColumns.TITLE)));
       task.setCreated(cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.CREATED)));
       task.setDue(cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE)));
@@ -79,15 +78,15 @@ public class TaskUtilsImpl implements TaskUtils {
     return uri != null;
   }
 
-  @Override public void updateTask(Long id, String taskName) {
-    updateTask(id, taskName, null);
+  @Override public void updateTask(Long id, Long listId, String taskName) {
+    updateTask(id, listId, taskName, null);
   }
 
-  @Override public void changeTaskStatus(Long id, boolean completed) {
-    updateTask(id, null, completed);
+  @Override public void changeTaskStatus(Long id, Long listId, boolean completed) {
+    updateTask(id, listId, null, completed);
   }
 
-  private void updateTask(Long id, String taskName, Boolean isCompleted) {
+  private void updateTask(Long id, Long listId, String taskName, Boolean isCompleted) {
     ContentValues contentValues = new ContentValues();
     if (taskName != null) {
       contentValues.put(TaskContract.TaskColumns.TITLE, taskName);
@@ -97,8 +96,10 @@ public class TaskUtilsImpl implements TaskUtils {
       contentValues.put(TaskContract.TaskColumns.STATUS, status);
     }
 
-    String where = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
-    int rows = mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues, where, null);
+    String taskIdWhere = String.format("%s == %d", TaskContract.TaskColumns._ID, id);
+    String listIdWhere = String.format("%s == %d", TaskContract.TaskColumns.LIST_ID, listId);
+    int rows = mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues,
+        taskIdWhere + " AND " + listIdWhere, null);
     Log.d(TAG, "Rows updated: " + rows);
   }
 }

@@ -19,8 +19,4 @@ public abstract class BaseActivity extends AppCompatActivity {
   }
 
   protected abstract int getLayoutResource();
-
-  protected void setActionBarIcon(int iconRes) {
-    toolbar.setNavigationIcon(iconRes);
-  }
 }

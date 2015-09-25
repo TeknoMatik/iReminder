@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.rg.ireminders.ui.activities.DetailsActivity"
+    tools:context="com.rg.ireminders.ui.activities.TaskItemsActivity"
     >
   <item
       android:id="@+id/show_hidden"

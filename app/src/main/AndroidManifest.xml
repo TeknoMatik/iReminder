@@ -49,7 +49,7 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".ui.activities.DetailsActivity"
+        android:name=".ui.activities.TaskItemsActivity"
         android:parentActivityName=".ui.activities.TaskListActivity"
         android:windowSoftInputMode="adjustPan"
         tools:ignore="UnusedAttribute"

@@ -20,8 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
 import com.rg.ireminders.db.utils.TaskUtils;
-import com.rg.ireminders.ui.activities.DetailsActivity;
-import com.rg.ireminders.ui.adapters.DetailsCursorAdapter;
+import com.rg.ireminders.ui.activities.TaskItemsActivity;
+import com.rg.ireminders.ui.adapters.TaskItemsCursorAdapter;
 import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
 
@@ -29,9 +29,8 @@ import org.dmfs.provider.tasks.TaskContract;
  * A task items fragment {@link Fragment} subclass.
  */
 public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
-
   private static final int URL_LOADER = 0;
-  private DetailsCursorAdapter mAdapter;
+  private TaskItemsCursorAdapter mAdapter;
   private Boolean mShowHidden = false;
   private EditText mAddEditText;
   private Long mListId;
@@ -55,14 +54,14 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
 
     mShowTime = new Date().getTime();
 
-    int color = getActivity().getIntent().getIntExtra(DetailsActivity.TASK_LIST_COLOR_ARG, 0);
-    String detailString = getActivity().getIntent().getStringExtra(DetailsActivity.TASK_LIST_DETAILS_ARG);
-    mListId = getActivity().getIntent().getLongExtra(DetailsActivity.TASK_LIST_ID_ARG, 0);
+    int color = getActivity().getIntent().getIntExtra(TaskItemsActivity.TASK_LIST_COLOR_ARG, 0);
+    String detailString = getActivity().getIntent().getStringExtra(TaskItemsActivity.TASK_LIST_DETAILS_ARG);
+    mListId = getActivity().getIntent().getLongExtra(TaskItemsActivity.TASK_LIST_ID_ARG, 0);
     TextView mTextView = (TextView) view.findViewById(R.id.text_view);
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new DetailsCursorAdapter(getActivity(), R.layout.details_item, null, 0, color);
+    mAdapter = new TaskItemsCursorAdapter(getActivity(), R.layout.details_item, null, 0, color, mListId);
     ListView mListView = (ListView) view.findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getLoaderManager().initLoader(URL_LOADER, getActivity().getIntent().getExtras(), this);
@@ -80,7 +79,7 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     if (id == URL_LOADER) {
-      Long taskListId = args.getLong(DetailsActivity.TASK_LIST_ID_ARG);
+      Long taskListId = args.getLong(TaskItemsActivity.TASK_LIST_ID_ARG);
       String selection;
 
       if (mShowHidden) {
@@ -102,12 +101,12 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    mAdapter.changeCursor(data);
+    mAdapter.swapCursor(data);
   }
 
   @Override
   public void onLoaderReset(Loader<Cursor> loader) {
-    mAdapter.changeCursor(null);
+    mAdapter.swapCursor(null);
   }
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
