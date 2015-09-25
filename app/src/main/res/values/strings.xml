@@ -12,7 +12,5 @@
   <string name="org_dmfs_tasks_authority">org.dmfs.tasks</string>
   <string name="show_hidden">Show hidden</string>
   <string name="notif_tittle">Reminder:</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="add_task_edit_text_hint">Tap to add a new item</string>
 </resources>
