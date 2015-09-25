@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,12 +62,12 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new TaskItemsCursorAdapter(getActivity(), R.layout.details_item, null, 0, color, mListId);
+    mAdapter = new TaskItemsCursorAdapter(getActivity(), R.layout.task_item, null, 0, color, mListId);
     ListView mListView = (ListView) view.findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getLoaderManager().initLoader(URL_LOADER, getActivity().getIntent().getExtras(), this);
 
-    RelativeLayout footerLayout = (RelativeLayout) getLayoutInflater(savedInstanceState).inflate(R.layout.details_item_add, null);
+    GridLayout footerLayout = (GridLayout) getLayoutInflater(savedInstanceState).inflate(R.layout.task_item_add, null);
     mAddEditText = (EditText) footerLayout.findViewById(R.id.addTaskEditText);
     mAddEditText.setOnKeyListener(mAddEditTextKeyListener);
     mListView.addFooterView(footerLayout);
