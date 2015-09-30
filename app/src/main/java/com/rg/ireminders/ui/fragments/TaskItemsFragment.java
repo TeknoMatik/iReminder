@@ -2,6 +2,7 @@ package com.rg.ireminders.ui.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -17,12 +18,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.rg.ireminders.R;
 import com.rg.ireminders.db.utils.TaskUtils;
 import com.rg.ireminders.ui.activities.TaskItemsActivity;
 import com.rg.ireminders.ui.adapters.TaskItemsCursorAdapter;
+import com.rg.ireminders.ui.dialogs.AddReminderDialogFragment;
 import java.util.Date;
 import org.dmfs.provider.tasks.TaskContract;
 
@@ -47,6 +48,15 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     }
   };
 
+  private TaskItemsCursorAdapter.OnAddReminderClick mOnAddReminderClick =
+      new TaskItemsCursorAdapter.OnAddReminderClick() {
+        @Override public void onClick(Long itemId) {
+          getActivity().getIntent().putExtra(TaskItemsActivity.TASK_ITEM_ID, itemId);
+          DialogFragment dateDialogFragment = new AddReminderDialogFragment();
+          getFragmentManager().beginTransaction().add(dateDialogFragment, "addReminderDialog").commit();
+        }
+      };
+
   public TaskItemsFragment() {
   }
 
@@ -62,7 +72,7 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new TaskItemsCursorAdapter(getActivity(), R.layout.task_item, null, 0, color, mListId);
+    mAdapter = new TaskItemsCursorAdapter(getActivity(), mOnAddReminderClick, R.layout.task_item, null, 0, color, mListId);
     ListView mListView = (ListView) view.findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getLoaderManager().initLoader(URL_LOADER, getActivity().getIntent().getExtras(), this);

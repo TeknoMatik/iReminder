@@ -1,0 +1,103 @@
+package com.rg.ireminders.ui.dialogs;
+
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import com.rg.ireminders.R;
+import com.rg.ireminders.db.utils.TaskUtils;
+import com.rg.ireminders.ui.activities.TaskItemsActivity;
+import com.rg.ireminders.ui.fragments.TaskItemsFragment;
+import java.util.Calendar;
+
+/**
+ * Dialog for adding a reminder to a task's item
+ */
+public class AddReminderDialogFragment extends DialogFragment implements View.OnClickListener,
+    DialogInterface.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+  private Calendar mCalendar;
+  private java.text.DateFormat mDateFormat;
+  private java.text.DateFormat mTimeFormat;
+  private Button mDateButton;
+  private Button mTimeButton;
+
+  @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+    View view = inflater.inflate(R.layout.add_reminder_dialog, null);
+
+    mCalendar = Calendar.getInstance();
+    mDateFormat = DateFormat.getMediumDateFormat(getActivity());
+    mTimeFormat = DateFormat.getTimeFormat(getActivity());
+
+    mDateButton = (Button) view.findViewById(R.id.dateButton);
+    mDateButton.setText(mDateFormat.format(mCalendar.getTime()));
+    mDateButton.setOnClickListener(this);
+
+    mTimeButton = (Button) view.findViewById(R.id.timeButton);
+    mTimeButton.setText(mTimeFormat.format(mCalendar.getTime()));
+    mTimeButton.setOnClickListener(this);
+
+    builder.setView(view);
+    builder.setPositiveButton(getActivity().getString(android.R.string.ok), this);
+    builder.setNegativeButton(getActivity().getString(android.R.string.cancel), this);
+    builder.setTitle(R.string.add_a_reminder_dialog_tittle);
+
+    return builder.create();
+  }
+
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.dateButton:
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog.show();
+        break;
+      case R.id.timeButton:
+        int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
+        int minute = mCalendar.get(Calendar.MINUTE);
+        boolean is24HourFormat = DateFormat.is24HourFormat(getActivity());
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute, is24HourFormat);
+        timePickerDialog.show();
+        break;
+    }
+  }
+
+  @Override public void onClick(DialogInterface dialog, int which) {
+    if (which == DialogInterface.BUTTON_POSITIVE) {
+      Long itemId = getActivity().getIntent().getLongExtra(TaskItemsActivity.TASK_ITEM_ID, 0);
+      Long listId = getActivity().getIntent().getLongExtra(TaskItemsActivity.TASK_LIST_ID_ARG, 0);
+      TaskUtils.Factory.get(getActivity()).addReminder(itemId, listId, mCalendar.getTimeInMillis());
+    }
+
+    dialog.dismiss();
+  }
+
+  @Override public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+    mCalendar.set(Calendar.YEAR, year);
+    mCalendar.set(Calendar.MONTH, monthOfYear);
+    mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+    mDateButton.setText(mDateFormat.format(mCalendar.getTime()));
+  }
+
+  @Override public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+    mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+    mCalendar.set(Calendar.MINUTE, minute);
+
+    mTimeButton.setText(mTimeFormat.format(mCalendar.getTime()));
+  }
+}

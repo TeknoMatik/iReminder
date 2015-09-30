@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import com.rg.ireminders.R;
+import com.rg.ireminders.ui.adapters.TaskItemsCursorAdapter;
 
 public class TaskItemsActivity extends BaseActivity {
 
   public static final String TASK_LIST_ID_ARG = "taskListId";
   public static final String TASK_LIST_DETAILS_ARG = "taskListDetails";
   public static final String TASK_LIST_COLOR_ARG = "taskListColor";
+  public static final String TASK_ITEM_ID = "itemId";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

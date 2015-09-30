@@ -13,4 +13,7 @@
   <string name="show_hidden">Show hidden</string>
   <string name="notif_tittle">Reminder:</string>
   <string name="add_task_edit_text_hint">Tap to add a new item</string>
+  <string name="pick_a_date_tittle">Pick a date and time:</string>
+  <string name="add_a_reminder_dialog_tittle">Add a reminder</string>
+  <string name="done_button">Done</string>
 </resources>

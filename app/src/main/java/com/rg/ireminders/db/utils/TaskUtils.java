@@ -20,6 +20,8 @@ public interface TaskUtils {
 
   void changeTaskStatus(Long id, Long listId, boolean completed);
 
+  void addReminder(Long id, Long listId, Long dueDate);
+
   public static class Factory {
     private static Factory instance = new Factory();
 

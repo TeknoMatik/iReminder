@@ -10,6 +10,7 @@ import com.rg.ireminders.db.entities.TaskList;
 import com.rg.ireminders.db.utils.TaskUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import org.dmfs.provider.tasks.TaskContract;
 
 public class TaskUtilsImpl implements TaskUtils {
@@ -79,14 +80,18 @@ public class TaskUtilsImpl implements TaskUtils {
   }
 
   @Override public void updateTask(Long id, Long listId, String taskName) {
-    updateTask(id, listId, taskName, null);
+    updateTask(id, listId, null, taskName, null);
   }
 
   @Override public void changeTaskStatus(Long id, Long listId, boolean completed) {
-    updateTask(id, listId, null, completed);
+    updateTask(id, listId, null, null, completed);
   }
 
-  private void updateTask(Long id, Long listId, String taskName, Boolean isCompleted) {
+  @Override public void addReminder(Long id, Long listId, Long dueDate) {
+    updateTask(id, listId, dueDate, null, null);
+  }
+
+  private void updateTask(Long id, Long listId, Long dueDate, String taskName, Boolean isCompleted) {
     ContentValues contentValues = new ContentValues();
     if (taskName != null) {
       contentValues.put(TaskContract.TaskColumns.TITLE, taskName);
@@ -94,6 +99,10 @@ public class TaskUtilsImpl implements TaskUtils {
     if (isCompleted != null) {
       int status = isCompleted ? TaskContract.TaskColumns.STATUS_COMPLETED : TaskContract.TaskColumns.STATUS_DEFAULT;
       contentValues.put(TaskContract.TaskColumns.STATUS, status);
+    }
+    if (dueDate != null) {
+      contentValues.put(TaskContract.TaskColumns.DUE, dueDate);
+      contentValues.put(TaskContract.TaskColumns.TZ, TimeZone.getDefault().getID());
     }
 
     String taskIdWhere = String.format("%s == %d", TaskContract.TaskColumns._ID, id);

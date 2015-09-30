@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:padding="25dp"
+    >
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/pick_a_date_tittle"
+      android:id="@+id/textView"
+      android:layout_alignParentTop="true"
+      />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateButton"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2"
+        android:gravity="start|center_vertical"
+        style="?android:attr/borderlessButtonStyle"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeButton"
+        android:gravity="start|center_vertical"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_alignTop="@+id/dateButton" android:layout_toRightOf="@+id/dateButton"
+        android:layout_toEndOf="@+id/dateButton"/>
+</RelativeLayout>

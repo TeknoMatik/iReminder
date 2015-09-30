@@ -8,15 +8,15 @@
     android:rowCount="2"
     >
     <CheckBox
+        android:id="@+id/statusCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/radioButton"
         android:layout_gravity="center"
         android:layout_row="0"
         android:layout_column="0"
         />
     <EditText
-        android:id="@+id/radioButtonText"
+        android:id="@+id/titleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -30,6 +30,18 @@
         android:inputType="text|textMultiLine"
         android:background="#00000000"
         android:imeOptions="actionGo"
+        />
+    <Button
+        android:id="@+id/addReminderButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_action_alarm_add"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_marginRight="40dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="end|center_vertical"
+        android:visibility="gone"
         />
     <TextView
         android:id="@+id/dueTextView"
