@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import com.rg.ireminders.R;
@@ -25,12 +26,28 @@ import java.util.Calendar;
  */
 public class AddReminderDialogFragment extends DialogFragment implements View.OnClickListener,
     DialogInterface.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+  private static final String HAS_REMINDER_ARG = "hasReminderArg";
+  private static final String ITEM_ID_ARG = "itemIdArg";
+  private static final String LIST_ID_ARG = "listIdArg";
 
   private Calendar mCalendar;
   private java.text.DateFormat mDateFormat;
   private java.text.DateFormat mTimeFormat;
   private Button mDateButton;
   private Button mTimeButton;
+  private CheckBox mReminderCheckBox;
+
+  public static AddReminderDialogFragment newInstance(Boolean hasReminder, Long itemId, Long listId) {
+    AddReminderDialogFragment dialogFragment = new AddReminderDialogFragment();
+
+    Bundle args = new Bundle();
+    args.putBoolean(HAS_REMINDER_ARG, hasReminder);
+    args.putLong(ITEM_ID_ARG, itemId);
+    args.putLong(LIST_ID_ARG, listId);
+    dialogFragment.setArguments(args);
+
+    return dialogFragment;
+  }
 
   @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -48,6 +65,10 @@ public class AddReminderDialogFragment extends DialogFragment implements View.On
     mTimeButton = (Button) view.findViewById(R.id.timeButton);
     mTimeButton.setText(mTimeFormat.format(mCalendar.getTime()));
     mTimeButton.setOnClickListener(this);
+
+    mReminderCheckBox = (CheckBox) view.findViewById(R.id.reminderCheckBox);
+    Boolean hasReminder = getArguments().getBoolean(HAS_REMINDER_ARG);
+    mReminderCheckBox.setChecked(hasReminder);
 
     builder.setView(view);
     builder.setPositiveButton(getActivity().getString(android.R.string.ok), this);
@@ -78,9 +99,13 @@ public class AddReminderDialogFragment extends DialogFragment implements View.On
 
   @Override public void onClick(DialogInterface dialog, int which) {
     if (which == DialogInterface.BUTTON_POSITIVE) {
-      Long itemId = getActivity().getIntent().getLongExtra(TaskItemsActivity.TASK_ITEM_ID, 0);
-      Long listId = getActivity().getIntent().getLongExtra(TaskItemsActivity.TASK_LIST_ID_ARG, 0);
-      TaskUtils.Factory.get(getActivity()).addReminder(itemId, listId, mCalendar.getTimeInMillis());
+      Long itemId = getArguments().getLong(ITEM_ID_ARG);
+      Long listId = getArguments().getLong(LIST_ID_ARG);
+      if (mReminderCheckBox.isChecked()) {
+        TaskUtils.Factory.get(getActivity()).addReminder(itemId, listId, mCalendar.getTimeInMillis());
+      } else {
+        TaskUtils.Factory.get(getActivity()).removeReminder(itemId, listId);
+      }
     }
 
     dialog.dismiss();

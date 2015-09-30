@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import com.rg.ireminders.R;
+import com.rg.ireminders.db.entities.TaskItem;
 import com.rg.ireminders.db.utils.TaskUtils;
 import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
 import com.rg.ireminders.utils.DateUtils;
@@ -30,7 +31,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
         String title = ((EditText) v).getText().toString();
-        Long id = (Long) v.getTag();
+        Long id = ((TaskItem) v.getTag()).getId();
         TaskUtils.Factory.get(mContext).updateTask(id, mListId, title);
         return true;
       }
@@ -71,23 +72,25 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     TextView dueText = (TextView) view.findViewById(R.id.dueTextView);
     Button addReminderButton = (Button) view.findViewById(R.id.addReminderButton);
 
-    String title = cursor.getString(cursor.getColumnIndex(TaskContract.TaskColumns.TITLE));
-    Integer status = cursor.getInt(cursor.getColumnIndex(TaskContract.TaskColumns.STATUS));
-    Long due = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE));
-    Long id = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID));
+    TaskItem taskItem = new TaskItem();
+    taskItem.fromCursor(cursor);
+
+    String title = taskItem.getTitle();
+    Integer status = taskItem.getStatus();
+    Long due = taskItem.getDue();
 
     statusCheckBox.setChecked(!status.equals(TaskContract.TaskColumns.STATUS_NEEDS_ACTION));
-    statusCheckBox.setTag(id);
+    statusCheckBox.setTag(taskItem);
     statusCheckBox.setOnClickListener(this);
     setCheckBoxColor(statusCheckBox);
 
     titleEditText.setText(title);
-    titleEditText.setTag(id);
+    titleEditText.setTag(taskItem);
     titleEditText.setTag(R.id.addReminderButton, addReminderButton);
     titleEditText.setOnKeyListener(mEditTextKeyListener);
     titleEditText.setOnTouchListener(mOnTouchListener);
 
-    addReminderButton.setTag(id);
+    addReminderButton.setTag(taskItem);
     addReminderButton.setOnClickListener(this);
 
     if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
@@ -107,20 +110,20 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
   }
 
   @Override public void onClick(View v) {
-    Long itemId = (Long) v.getTag();
+    TaskItem taskItem = (TaskItem) v.getTag();
     switch (v.getId()) {
       case R.id.statusCheckBox :
         CheckBox statusCheckBox = (CheckBox) v;
-        TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(itemId, mListId, statusCheckBox.isChecked());
+        TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(taskItem.getId(), mListId, statusCheckBox.isChecked());
         break;
       case R.id.addReminderButton :
         mLastFocusedButton.setVisibility(View.GONE);
-        mOnAddReminderClick.onClick(itemId);
+        mOnAddReminderClick.onClick(taskItem.getDue() != 0, taskItem.getId(), taskItem.getListId());
         break;
     }
   }
 
   public interface OnAddReminderClick {
-    void onClick(Long itemId);
+    void onClick(Boolean hasReminder, Long itemId, Long listId);
   }
 }

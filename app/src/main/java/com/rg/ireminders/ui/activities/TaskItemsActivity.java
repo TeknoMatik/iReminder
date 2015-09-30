@@ -13,7 +13,6 @@ public class TaskItemsActivity extends BaseActivity {
   public static final String TASK_LIST_ID_ARG = "taskListId";
   public static final String TASK_LIST_DETAILS_ARG = "taskListDetails";
   public static final String TASK_LIST_COLOR_ARG = "taskListColor";
-  public static final String TASK_ITEM_ID = "itemId";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

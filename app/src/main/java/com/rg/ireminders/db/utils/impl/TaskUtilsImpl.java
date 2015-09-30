@@ -91,6 +91,10 @@ public class TaskUtilsImpl implements TaskUtils {
     updateTask(id, listId, dueDate, null, null);
   }
 
+  @Override public void removeReminder(Long id, Long listId) {
+    updateTask(id, listId, 0L, null, null);
+  }
+
   private void updateTask(Long id, Long listId, Long dueDate, String taskName, Boolean isCompleted) {
     ContentValues contentValues = new ContentValues();
     if (taskName != null) {
@@ -102,7 +106,11 @@ public class TaskUtilsImpl implements TaskUtils {
     }
     if (dueDate != null) {
       contentValues.put(TaskContract.TaskColumns.DUE, dueDate);
-      contentValues.put(TaskContract.TaskColumns.TZ, TimeZone.getDefault().getID());
+      if (dueDate == 0) {
+        contentValues.put(TaskContract.TaskColumns.TZ, "");
+      } else {
+        contentValues.put(TaskContract.TaskColumns.TZ, TimeZone.getDefault().getID());
+      }
     }
 
     String taskIdWhere = String.format("%s == %d", TaskContract.TaskColumns._ID, id);

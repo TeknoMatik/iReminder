@@ -22,6 +22,8 @@ public interface TaskUtils {
 
   void addReminder(Long id, Long listId, Long dueDate);
 
+  void removeReminder(Long id, Long listId);
+
   public static class Factory {
     private static Factory instance = new Factory();
 

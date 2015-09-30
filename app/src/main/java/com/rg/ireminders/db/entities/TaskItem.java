@@ -12,12 +12,14 @@ public class TaskItem {
   private Integer status;
   private Long created;
   private Long due;
+  private Long listId;
 
   public void fromCursor(Cursor cursor) {
     title = cursor.getString(cursor.getColumnIndex(TaskContract.TaskColumns.TITLE));
     status = cursor.getInt(cursor.getColumnIndex(TaskContract.TaskColumns.STATUS));
     due = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.DUE));
     id = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns._ID));
+    listId = cursor.getLong(cursor.getColumnIndex(TaskContract.TaskColumns.LIST_ID));
   }
 
   public Long getId() {
@@ -60,6 +62,14 @@ public class TaskItem {
     this.due = due;
   }
 
+  public Long getListId() {
+    return listId;
+  }
+
+  public void setListId(Long listId) {
+    this.listId = listId;
+  }
+
   @Override public String toString() {
     return "TaskItem{" +
         "id=" + id +
@@ -67,6 +77,7 @@ public class TaskItem {
         ", status=" + status +
         ", created=" + created +
         ", due=" + due +
+        ", listId=" + listId +
         '}';
   }
 }

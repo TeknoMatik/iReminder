@@ -50,9 +50,8 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
 
   private TaskItemsCursorAdapter.OnAddReminderClick mOnAddReminderClick =
       new TaskItemsCursorAdapter.OnAddReminderClick() {
-        @Override public void onClick(Long itemId) {
-          getActivity().getIntent().putExtra(TaskItemsActivity.TASK_ITEM_ID, itemId);
-          DialogFragment dateDialogFragment = new AddReminderDialogFragment();
+        @Override public void onClick(Boolean hasReminder, Long itemId, Long listId) {
+          DialogFragment dateDialogFragment = AddReminderDialogFragment.newInstance(hasReminder, itemId, listId);
           getFragmentManager().beginTransaction().add(dateDialogFragment, "addReminderDialog").commit();
         }
       };
