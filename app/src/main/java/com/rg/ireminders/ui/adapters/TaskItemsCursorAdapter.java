@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -92,6 +93,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     titleEditText.setOnTouchListener(mOnTouchListener);
 
     addReminderButton.setTag(taskItem);
+    addReminderButton.setTag(R.id.titleEditText, titleEditText);
     addReminderButton.setOnClickListener(this);
 
     if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
@@ -100,7 +102,6 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
       String date = DateUtils.getDueDate(due);
       dueText.setVisibility(View.VISIBLE);
       dueText.setText(date);
-      dueText.setOnTouchListener(mOnTouchListener);
     }
   }
 
@@ -119,10 +120,21 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
         TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(taskItem.getId(), mListId, statusCheckBox.isChecked());
         break;
       case R.id.addReminderButton :
+        EditText editText = (EditText) v.getTag(R.id.titleEditText);
+        if (editText != null) {
+          hideKeyboard(editText);
+        }
+
         mLastFocusedButton.setVisibility(View.GONE);
+        mLastFocusedButton = null;
         mOnAddReminderClick.onClick(taskItem.getDue() != 0, taskItem.getId(), taskItem.getListId());
         break;
     }
+  }
+
+  private void hideKeyboard(View view) {
+    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
   }
 
   public interface OnAddReminderClick {
