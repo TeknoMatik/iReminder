@@ -17,8 +17,6 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import com.rg.ireminders.R;
 import com.rg.ireminders.db.utils.TaskUtils;
-import com.rg.ireminders.ui.activities.TaskItemsActivity;
-import com.rg.ireminders.ui.fragments.TaskItemsFragment;
 import java.util.Calendar;
 
 /**
@@ -117,6 +115,7 @@ public class AddReminderDialogFragment extends DialogFragment implements View.On
     mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
     mDateButton.setText(mDateFormat.format(mCalendar.getTime()));
+    mReminderCheckBox.setChecked(true);
   }
 
   @Override public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -124,5 +123,6 @@ public class AddReminderDialogFragment extends DialogFragment implements View.On
     mCalendar.set(Calendar.MINUTE, minute);
 
     mTimeButton.setText(mTimeFormat.format(mCalendar.getTime()));
+    mReminderCheckBox.setChecked(true);
   }
 }
