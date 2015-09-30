@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.os.Build;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +43,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
   private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
     @Override public boolean onTouch(View v, MotionEvent event) {
       Button button = (Button) v.getTag(R.id.addReminderButton);
-      if (event.getAction() == MotionEvent.ACTION_DOWN) {
+      if (event.getAction() == MotionEvent.ACTION_UP) {
         if (button != mLastFocusedButton) {
           if (mLastFocusedButton != null) {
             mLastFocusedButton.setVisibility(View.GONE);
@@ -99,6 +100,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
       String date = DateUtils.getDueDate(due);
       dueText.setVisibility(View.VISIBLE);
       dueText.setText(date);
+      dueText.setOnTouchListener(mOnTouchListener);
     }
   }
 
