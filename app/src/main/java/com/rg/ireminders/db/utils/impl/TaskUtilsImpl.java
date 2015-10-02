@@ -105,10 +105,11 @@ public class TaskUtilsImpl implements TaskUtils {
       contentValues.put(TaskContract.TaskColumns.STATUS, status);
     }
     if (dueDate != null) {
-      contentValues.put(TaskContract.TaskColumns.DUE, dueDate);
       if (dueDate == 0) {
+        contentValues.put(TaskContract.TaskColumns.DUE, (Long)null);
         contentValues.put(TaskContract.TaskColumns.TZ, "");
       } else {
+        contentValues.put(TaskContract.TaskColumns.DUE, dueDate);
         contentValues.put(TaskContract.TaskColumns.TZ, TimeZone.getDefault().getID());
       }
     }
