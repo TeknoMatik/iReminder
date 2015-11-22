@@ -19,6 +19,8 @@ import com.rg.ireminders.db.entities.TaskItem;
 import com.rg.ireminders.db.utils.TaskUtils;
 import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
 import com.rg.ireminders.utils.DateUtils;
+import java.util.HashMap;
+import java.util.Map;
 import org.dmfs.provider.tasks.TaskContract;
 
 public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements View.OnClickListener {
@@ -27,6 +29,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
   private Long mListId;
   private Button mLastFocusedButton;
   private TaskItemsAdapterListener mTaskItemsAdapterListener;
+  private Map<Long, Boolean> mStatusMap = new HashMap<>();
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -80,7 +83,12 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     Integer status = taskItem.getStatus();
     Long due = taskItem.getDue();
 
-    statusCheckBox.setChecked(!status.equals(TaskContract.TaskColumns.STATUS_NEEDS_ACTION));
+    if (mStatusMap.containsKey(taskItem.getId())) {
+      Boolean newStatus = mStatusMap.get(taskItem.getId());
+      statusCheckBox.setChecked(newStatus);
+    } else {
+      statusCheckBox.setChecked(!status.equals(TaskContract.TaskColumns.STATUS_NEEDS_ACTION));
+    }
     statusCheckBox.setTag(taskItem);
     statusCheckBox.setOnClickListener(this);
     setCheckBoxColor(statusCheckBox);
@@ -116,6 +124,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     switch (v.getId()) {
       case R.id.statusCheckBox :
         CheckBox statusCheckBox = (CheckBox) v;
+        mStatusMap.put(taskItem.getId(), statusCheckBox.isChecked());
         mTaskItemsAdapterListener.onStatusChanged(statusCheckBox.isChecked(), taskItem.getId());
         break;
       case R.id.addReminderButton :
