@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.os.Build;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +26,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
   private int mColor;
   private Long mListId;
   private Button mLastFocusedButton;
-  private OnAddReminderClick mOnAddReminderClick;
+  private TaskItemsAdapterListener mTaskItemsAdapterListener;
 
   private View.OnKeyListener mEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -58,13 +57,13 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     }
   };
 
-  public TaskItemsCursorAdapter(Context context, OnAddReminderClick onAddReminderClick, int layout, Cursor c, int flags,
+  public TaskItemsCursorAdapter(Context context, TaskItemsAdapterListener taskItemsAdapterListener, int layout, Cursor c, int flags,
       int color, Long listId) {
     super(context, layout, c, flags);
     mContext = context;
     mColor = color;
     mListId = listId;
-    mOnAddReminderClick = onAddReminderClick;
+    mTaskItemsAdapterListener = taskItemsAdapterListener;
   }
 
   @Override
@@ -117,7 +116,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     switch (v.getId()) {
       case R.id.statusCheckBox :
         CheckBox statusCheckBox = (CheckBox) v;
-        TaskUtilsImpl.Factory.get(mContext).changeTaskStatus(taskItem.getId(), mListId, statusCheckBox.isChecked());
+        mTaskItemsAdapterListener.onStatusChanged(statusCheckBox.isChecked(), taskItem.getId());
         break;
       case R.id.addReminderButton :
         EditText editText = (EditText) v.getTag(R.id.titleEditText);
@@ -127,7 +126,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
 
         mLastFocusedButton.setVisibility(View.GONE);
         mLastFocusedButton = null;
-        mOnAddReminderClick.onClick(taskItem.getDue() != 0, taskItem.getId(), taskItem.getListId());
+        mTaskItemsAdapterListener.onAddReminder(taskItem.getDue() != 0, taskItem.getId(), taskItem.getListId());
         break;
     }
   }
@@ -137,7 +136,8 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
   }
 
-  public interface OnAddReminderClick {
-    void onClick(Boolean hasReminder, Long itemId, Long listId);
+  public interface TaskItemsAdapterListener {
+    void onAddReminder(Boolean hasReminder, Long itemId, Long listId);
+    void onStatusChanged(Boolean status, Long itemId);
   }
 }

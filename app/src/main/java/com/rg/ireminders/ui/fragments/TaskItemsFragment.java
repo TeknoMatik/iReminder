@@ -25,6 +25,8 @@ import com.rg.ireminders.ui.activities.TaskItemsActivity;
 import com.rg.ireminders.ui.adapters.TaskItemsCursorAdapter;
 import com.rg.ireminders.ui.dialogs.AddReminderDialogFragment;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.dmfs.provider.tasks.TaskContract;
 
 /**
@@ -37,6 +39,7 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
   private EditText mAddEditText;
   private Long mListId;
   private Long mShowTime;
+  private Map<Long, Boolean> mStatusMap = new HashMap<>();
 
   private View.OnKeyListener mAddEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -48,11 +51,15 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     }
   };
 
-  private TaskItemsCursorAdapter.OnAddReminderClick mOnAddReminderClick =
-      new TaskItemsCursorAdapter.OnAddReminderClick() {
-        @Override public void onClick(Boolean hasReminder, Long itemId, Long listId) {
+  private TaskItemsCursorAdapter.TaskItemsAdapterListener mTaskItemsAdapterListener =
+      new TaskItemsCursorAdapter.TaskItemsAdapterListener() {
+        @Override public void onAddReminder(Boolean hasReminder, Long itemId, Long listId) {
           DialogFragment dateDialogFragment = AddReminderDialogFragment.newInstance(hasReminder, itemId, listId);
           getFragmentManager().beginTransaction().add(dateDialogFragment, "addReminderDialog").commit();
+        }
+
+        @Override public void onStatusChanged(Boolean status, Long itemId) {
+          mStatusMap.put(itemId, status);
         }
       };
 
@@ -71,7 +78,7 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     mTextView.setText(detailString);
     mTextView.setTextColor(color);
 
-    mAdapter = new TaskItemsCursorAdapter(getActivity(), mOnAddReminderClick, R.layout.task_item, null, 0, color, mListId);
+    mAdapter = new TaskItemsCursorAdapter(getActivity(), mTaskItemsAdapterListener, R.layout.task_item, null, 0, color, mListId);
     ListView mListView = (ListView) view.findViewById(R.id.task_list);
     mListView.setAdapter(mAdapter);
     getLoaderManager().initLoader(URL_LOADER, getActivity().getIntent().getExtras(), this);
@@ -142,6 +149,15 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+
+    for (Long itemId : mStatusMap.keySet()) {
+      Boolean status = mStatusMap.get(itemId);
+      TaskUtils.Factory.get(getActivity()).changeTaskStatus(itemId, mListId, status);
+    }
   }
 
   private void insertItem() {
