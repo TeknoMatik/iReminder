@@ -49,7 +49,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
   @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     if (id == URL_LOADER) {
       Uri uri = TaskContract.TaskLists.getContentUri(TaskContract.AUTHORITY);
-      return new CursorLoader(getActivity(), uri, null, null, null, null);
+      String selection = "account_type != \"LOCAL\"";
+      return new CursorLoader(getActivity(), uri, null, selection, null, null);
     } else {
       return null;
     }
