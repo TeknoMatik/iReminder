@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,13 +34,13 @@ import org.dmfs.provider.tasks.TaskContract;
  * A task items fragment {@link Fragment} subclass.
  */
 public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
+  private static final String TAG = "TaskItemsFragment";
   private static final int URL_LOADER = 0;
   private TaskItemsCursorAdapter mAdapter;
   private Boolean mShowHidden = false;
   private EditText mAddEditText;
   private Long mListId;
   private Long mShowTime;
-  private Map<Long, Boolean> mStatusMap = new HashMap<>();
 
   private View.OnKeyListener mAddEditTextKeyListener = new View.OnKeyListener() {
     @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -56,10 +57,6 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
         @Override public void onAddReminder(Boolean hasReminder, Long itemId, Long listId) {
           DialogFragment dateDialogFragment = AddReminderDialogFragment.newInstance(hasReminder, itemId, listId);
           getFragmentManager().beginTransaction().add(dateDialogFragment, "addReminderDialog").commit();
-        }
-
-        @Override public void onStatusChanged(Boolean status, Long itemId) {
-          mStatusMap.put(itemId, status);
         }
       };
 
@@ -99,19 +96,21 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     if (id == URL_LOADER) {
       Long taskListId = args.getLong(TaskItemsActivity.TASK_LIST_ID_ARG);
       String selection;
+      String sorting;
 
       if (mShowHidden) {
         selection = String.format("%s = %d", TaskContract.TaskColumns.LIST_ID, taskListId);
+        sorting = TaskContract.TaskColumns.STATUS + " ASC" + ", " + TaskContract.TaskColumns.COMPLETED + " DESC";
       } else {
         selection = String.format("%s = %d AND %s = %d OR (%s == %d AND %s > %d)",
             TaskContract.TaskColumns.LIST_ID, taskListId,
             TaskContract.TaskColumns.STATUS, TaskContract.TaskColumns.STATUS_DEFAULT,
             TaskContract.TaskColumns.STATUS, TaskContract.TaskColumns.STATUS_COMPLETED,
             TaskContract.TaskColumns.COMPLETED, mShowTime);
+        sorting = TaskContract.TaskColumns.CREATED + " ASC";
       }
 
-      return new CursorLoader(getActivity(), TaskContract.Tasks.CONTENT_URI, null, selection, null,
-          TaskContract.TaskColumns.STATUS + " ASC" + ", " + TaskContract.TaskColumns.CREATED + " ASC");
+      return new CursorLoader(getActivity(), TaskContract.Tasks.CONTENT_URI, null, selection, null, sorting);
     } else {
       return null;
     }
@@ -149,15 +148,6 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-
-    for (Long itemId : mStatusMap.keySet()) {
-      Boolean status = mStatusMap.get(itemId);
-      TaskUtils.Factory.get(getActivity()).changeTaskStatus(itemId, mListId, status);
-    }
   }
 
   private void insertItem() {

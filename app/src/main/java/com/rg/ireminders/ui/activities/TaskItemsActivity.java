@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import com.rg.ireminders.R;
-import com.rg.ireminders.ui.adapters.TaskItemsCursorAdapter;
 
 public class TaskItemsActivity extends BaseActivity {
 

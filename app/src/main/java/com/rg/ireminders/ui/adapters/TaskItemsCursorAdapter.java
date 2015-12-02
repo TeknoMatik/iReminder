@@ -125,7 +125,8 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
       case R.id.statusCheckBox :
         CheckBox statusCheckBox = (CheckBox) v;
         mStatusMap.put(taskItem.getId(), statusCheckBox.isChecked());
-        mTaskItemsAdapterListener.onStatusChanged(statusCheckBox.isChecked(), taskItem.getId());
+        TaskUtils.Factory.get(mContext).changeTaskStatus(taskItem.getId(), mListId, statusCheckBox.isChecked());
+
         break;
       case R.id.addReminderButton :
         EditText editText = (EditText) v.getTag(R.id.titleEditText);
@@ -147,6 +148,5 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
 
   public interface TaskItemsAdapterListener {
     void onAddReminder(Boolean hasReminder, Long itemId, Long listId);
-    void onStatusChanged(Boolean status, Long itemId);
   }
 }
