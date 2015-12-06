@@ -16,4 +16,8 @@
   <string name="pick_a_date_tittle">Pick a date and time:</string>
   <string name="add_a_reminder_dialog_tittle">Add a reminder</string>
   <string name="done_button">Done</string>
+  <string name="delete_completed">Delete completed?</string>
+  <string name="confirmation">Confirmation</string>
+  <string name="delete_completed_dialog_message">Do you want to delete all completed tasks?</string>
+  <string name="delete_completed_success">Completed tasks has been deleted successfully</string>
 </resources>

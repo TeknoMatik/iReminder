@@ -120,4 +120,13 @@ public class TaskUtilsImpl implements TaskUtils {
         taskIdWhere + " AND " + listIdWhere, null);
     Log.d(TAG, "Rows updated: " + rows);
   }
+
+  @Override public int deleteCompleted(Long listId) {
+    String where = TaskContract.TaskColumns.LIST_ID + " = " + listId +
+        " AND " +
+        TaskContract.TaskColumns.STATUS + " = " + TaskContract.TaskColumns.STATUS_COMPLETED;
+    int rows = mContentResolver.delete(TaskContract.Tasks.CONTENT_URI, where, null);
+    Log.d(TAG, "Rows deleted: " + rows);
+    return rows;
+  }
 }

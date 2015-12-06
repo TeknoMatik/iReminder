@@ -1,5 +1,6 @@
 package com.rg.ireminders.ui.fragments;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.rg.ireminders.R;
 import com.rg.ireminders.db.utils.TaskUtils;
 import com.rg.ireminders.ui.activities.TaskItemsActivity;
@@ -145,6 +148,10 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
         refreshList();
         return true;
       }
+      case R.id.delete_completed_action: {
+        showConfirmationDialog();
+        return true;
+      }
     }
 
     return super.onOptionsItemSelected(item);
@@ -162,5 +169,27 @@ public class TaskItemsFragment extends Fragment implements LoaderManager.LoaderC
   private void refreshList() {
     getLoaderManager().restartLoader(URL_LOADER, getActivity().getIntent().getExtras(), this);
     mAdapter.notifyDataSetChanged();
+  }
+
+  private void showConfirmationDialog() {
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+    alertBuilder.setTitle(getActivity().getString(R.string.confirmation));
+    alertBuilder.setMessage(getActivity().getString(R.string.delete_completed_dialog_message));
+    alertBuilder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+      @Override public void onClick(DialogInterface dialog, int which) {
+        dialog.cancel();
+      }
+    });
+
+    alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+      @Override public void onClick(DialogInterface dialog, int which) {
+        int rows = TaskUtils.Factory.get(getActivity()).deleteCompleted(mListId);
+        if (rows > 0) {
+          Toast.makeText(getActivity(), R.string.delete_completed_success, Toast.LENGTH_LONG).show();
+        }
+        dialog.dismiss();
+      }
+    });
+    alertBuilder.create().show();
   }
 }
