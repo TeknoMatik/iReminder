@@ -30,7 +30,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.O
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    //getMenuInflater().inflate(R.menu.menu_main, menu);
+    getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
@@ -38,7 +38,15 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.O
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
-    return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    switch (id) {
+      case R.id.open_schedule:
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        startActivity(intent);
+
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
   }
 
   @Override public void onTaskListItemClick(View view, String taskName, Long taskId, Integer taskColor) {

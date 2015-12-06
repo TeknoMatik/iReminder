@@ -20,4 +20,6 @@
   <string name="confirmation">Confirmation</string>
   <string name="delete_completed_dialog_message">Do you want to delete all completed tasks?</string>
   <string name="delete_completed_success">Completed tasks has been deleted successfully</string>
+  <string name="title_activity_schedule">ScheduleActivity</string>
+  <string name="scheduled">Scheduled</string>
 </resources>

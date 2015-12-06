@@ -129,4 +129,22 @@ public class TaskUtilsImpl implements TaskUtils {
     Log.d(TAG, "Rows deleted: " + rows);
     return rows;
   }
+
+  @Override public List<TaskItem> getScheduledTasks() {
+    String selection = TaskContract.TaskColumns.STATUS + " = " + TaskContract.TaskColumns.STATUS_DEFAULT
+        + " AND " +
+        TaskContract.TaskColumns.DUE + " > " + 0;
+    String sorting = TaskContract.TaskColumns.DUE + " ASC";
+    Cursor cursor = mContentResolver.query(TaskContract.Tasks.CONTENT_URI, null, selection, null, sorting);
+
+    List<TaskItem> taskItemList = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      TaskItem task = new TaskItem();
+      task.fromCursor(cursor);
+      taskItemList.add(task);
+    }
+    cursor.close();
+
+    return taskItemList;
+  }
 }

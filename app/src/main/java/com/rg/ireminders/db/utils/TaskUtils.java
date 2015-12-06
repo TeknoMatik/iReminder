@@ -26,6 +26,8 @@ public interface TaskUtils {
 
   int deleteCompleted(Long listId);
 
+  List<TaskItem> getScheduledTasks();
+
   public static class Factory {
     private static Factory instance = new Factory();
 
