@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.rg.ireminders.R;
 import com.rg.ireminders.db.entities.TaskItem;
 import com.rg.ireminders.db.utils.TaskUtils;
-import com.rg.ireminders.db.utils.impl.TaskUtilsImpl;
 import com.rg.ireminders.utils.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
@@ -106,7 +105,7 @@ public class TaskItemsCursorAdapter extends ResourceCursorAdapter implements Vie
     if (due == 0 || status == TaskContract.TaskColumns.STATUS_COMPLETED) {
       dueText.setVisibility(View.GONE);
     } else {
-      String date = DateUtils.getDueDate(due);
+      String date = DateUtils.getDueDateTime(due);
       dueText.setVisibility(View.VISIBLE);
       dueText.setText(date);
     }

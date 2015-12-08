@@ -9,7 +9,7 @@ import java.util.Date;
  * Date utils
  */
 public final class DateUtils {
-  public static String getDueDate(Long milliseconds) {
+  public static String getDueDateTime(Long milliseconds) {
     Date date = new Date(milliseconds);
     DateFormat dateFormat = DateFormat.getInstance();
 
@@ -19,6 +19,13 @@ public final class DateUtils {
   public static String getDueTime(Long milliseconds) {
     Date date = new Date(milliseconds);
     DateFormat dateFormat = DateFormat.getTimeInstance();
+
+    return dateFormat.format(date);
+  }
+
+  public static String getDueDate(Long milliseconds) {
+    Date date = new Date(milliseconds);
+    DateFormat dateFormat = DateFormat.getDateInstance();
 
     return dateFormat.format(date);
   }
