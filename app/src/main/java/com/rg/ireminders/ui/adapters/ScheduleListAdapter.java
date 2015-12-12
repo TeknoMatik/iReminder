@@ -128,12 +128,23 @@ public class ScheduleListAdapter extends BaseAdapter implements CompoundButton.O
 
   private String getSectionName(int daysCount) {
     String section;
-    if (daysCount == 0) {
-      section = mContext.getString(R.string.today);
-    } else if (daysCount == 1) {
-      section = mContext.getString(R.string.tomorrow);
-    } else {
-      section = String.format(mContext.getString(R.string.next_days), daysCount);
+
+    switch (daysCount) {
+      case -1:
+        section = "Yesterday";
+        break;
+      case 0:
+        section = mContext.getString(R.string.today);
+        break;
+      case 1:
+        section = mContext.getString(R.string.tomorrow);
+        break;
+      default:
+        if (daysCount > 0) {
+          section = String.format(mContext.getString(R.string.next_days), daysCount);
+        } else {
+          section = String.format("%d days ago", -daysCount);
+        }
     }
 
     return section;
