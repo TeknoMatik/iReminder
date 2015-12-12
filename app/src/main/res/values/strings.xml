@@ -25,4 +25,6 @@
   <string name="today">Today</string>
   <string name="tomorrow">Tomorrow</string>
   <string name="next_days">Next %d days</string>
+  <string name="yesterday">Yesterday</string>
+  <string name="previous_days">%d days ago</string>
 </resources>

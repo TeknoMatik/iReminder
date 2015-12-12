@@ -131,7 +131,7 @@ public class ScheduleListAdapter extends BaseAdapter implements CompoundButton.O
 
     switch (daysCount) {
       case -1:
-        section = "Yesterday";
+        section = mContext.getString(R.string.yesterday);
         break;
       case 0:
         section = mContext.getString(R.string.today);
@@ -143,7 +143,7 @@ public class ScheduleListAdapter extends BaseAdapter implements CompoundButton.O
         if (daysCount > 0) {
           section = String.format(mContext.getString(R.string.next_days), daysCount);
         } else {
-          section = String.format("%d days ago", -daysCount);
+          section = String.format(mContext.getString(R.string.previous_days), -daysCount);
         }
     }
 
