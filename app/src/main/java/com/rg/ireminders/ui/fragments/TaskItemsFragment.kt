@@ -102,7 +102,7 @@ class TaskItemsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>, Tas
                 val columnCompleted = TaskContract.TaskColumns.COMPLETED
                 selection = "$columnListId = $taskListId AND $columnStatus = $columnStatusDefault OR ($columnStatus == $columnStatusCompleted AND $columnCompleted > $mShowTime)"
                 sorting = TaskContract.TaskColumns.CREATED + " ASC"
-            }   
+            }
 
             return CursorLoader(activity, TaskContract.Tasks.CONTENT_URI, null, selection, null, sorting)
         } else {
