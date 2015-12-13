@@ -40,7 +40,7 @@ class TaskUtilsImpl(private val mContentResolver: ContentResolver) : TaskUtils {
 
     override fun getTaskByTaskListId(taskListId: Long?): List<TaskItem> {
         val tasks = ArrayList<TaskItem>()
-        val selection = "$@TaskContract.TaskColumns.LIST_ID = $taskListId"
+        val selection = TaskContract.TaskColumns.LIST_ID + " = $taskListId"
         val cursor = mContentResolver.query(TaskContract.Tasks.CONTENT_URI, null, selection, null, null)
         cursor.moveToFirst()
         while (cursor.moveToNext()) {
@@ -103,8 +103,8 @@ class TaskUtilsImpl(private val mContentResolver: ContentResolver) : TaskUtils {
             }
         }
 
-        val taskIdWhere = "$@TaskContract.TaskColumns._ID == $id"
-        val listIdWhere = "$@TaskContract.TaskColumns.LIST_ID == $listId"
+        val taskIdWhere = TaskContract.TaskColumns._ID + " == $id"
+        val listIdWhere = TaskContract.TaskColumns.LIST_ID + " == $listId"
         val rows = mContentResolver.update(TaskContract.Tasks.CONTENT_URI, contentValues,
                 taskIdWhere + " AND " + listIdWhere, null)
         Log.d(TAG, "Rows updated: " + rows)
@@ -119,7 +119,7 @@ class TaskUtilsImpl(private val mContentResolver: ContentResolver) : TaskUtils {
 
     override val scheduledTasks: List<TaskItem>
         get() {
-            val selection = TaskContract.TaskColumns.STATUS + " = " + TaskContract.TaskColumns.STATUS_DEFAULT + " AND " + TaskContract.TaskColumns.DUE + " > " + 0
+            val selection = TaskContract.TaskColumns.STATUS + " = " + TaskContract.TaskColumns.STATUS_DEFAULT + " AND "+ TaskContract.TaskColumns.DUE + " > " + 0
             val sorting = TaskContract.TaskColumns.DUE + " ASC"
             val cursor = mContentResolver.query(TaskContract.Tasks.CONTENT_URI, null, selection, null, sorting)
 

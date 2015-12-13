@@ -89,13 +89,20 @@ class TaskItemsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>, Tas
             val selection: String
             val sorting: String
 
+            val columnListId = TaskContract.TaskColumns.LIST_ID
+
             if (mShowHidden!!) {
-                selection = "$@TaskContract.TaskColumns.LIST_ID = $taskListId"
+                selection = "$columnListId = $taskListId"
                 sorting = TaskContract.TaskColumns.STATUS + " ASC" + ", " + TaskContract.TaskColumns.COMPLETED + " DESC"
             } else {
-                selection = ("$@TaskContract.TaskColumns.LIST_ID = $taskListId AND $@TaskContract.TaskColumns.STATUS = $@TaskContract.TaskColumns.STATUS_DEFAULT OR ($@TaskContract.TaskColumns.STATUS == $@TaskContract.TaskColumns.STATUS_COMPLETED AND $@TaskContract.TaskColumns.COMPLETED > $mShowTime)")
+                //TODO: think about to using Java constants inside string expressions
+                val columnStatus = TaskContract.TaskColumns.STATUS
+                val columnStatusDefault = TaskContract.TaskColumns.STATUS_DEFAULT
+                val columnStatusCompleted = TaskContract.TaskColumns.STATUS_COMPLETED
+                val columnCompleted = TaskContract.TaskColumns.COMPLETED
+                selection = "$columnListId = $taskListId AND $columnStatus = $columnStatusDefault OR ($columnStatus == $columnStatusCompleted AND $columnCompleted > $mShowTime)"
                 sorting = TaskContract.TaskColumns.CREATED + " ASC"
-            }
+            }   
 
             return CursorLoader(activity, TaskContract.Tasks.CONTENT_URI, null, selection, null, sorting)
         } else {
